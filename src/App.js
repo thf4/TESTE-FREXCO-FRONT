@@ -1,23 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from "react-router-dom";
+
+import { AuthProvider } from "./Auth/Auth-Provider";
+import PrivateRouter from "./Auth/providerRouter";
+import Login from "./Pages/Login";
+import Create from "./Pages/CreateUser";
+import Home from "./Pages/Home";
+import Dados from "./Pages/ClientData";
+import Product from "./Pages/Product";
+import EditProduct from "./Pages/Product/editProduct";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <AuthProvider>
+        <Router>
+          <Switch>
+            <Route exact path="/" component={() => <Redirect to="/login" />} />
+            <Route exact path="/login" component={Login} />
+            <Route exact path="/cadastrar" component={Create} />
+            <PrivateRouter exact path="/home" component={Home} />
+            <PrivateRouter exact path="/cliente/:_id" component={Dados} />
+            <PrivateRouter exact path="/product" component={Product} />
+            <PrivateRouter exact path="/product/edit" component={EditProduct} />
+            <Route path="*" component={() => "404 NOT FOUND"} />
+          </Switch>
+        </Router>
+      </AuthProvider>
     </div>
   );
 }
