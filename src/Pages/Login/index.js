@@ -15,7 +15,7 @@ const Login = () => {
     password: "",
   });
 
-  const {setAuthenticated} = useContext(AuthContext);
+  const { setAuthenticated } = useContext(AuthContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,7 +25,7 @@ const Login = () => {
       sessionStorage.setItem("Token", response.data.token);
       const token = jwt.decode(response.data.token);
       setAuthenticated(true);
-      history.push(`/cliente/${token._id}`);
+      history.push(`/cliente/${token._id}/dados`);
     } catch (err) {
       if (
         err &&
@@ -95,12 +95,12 @@ const Login = () => {
               Sign In
             </Button>
 
-            <Typography text>
+            <Typography>
               É a sua primeira vez na nossa nova loja? O cadastro é fácil,
               rápido e só tem três passos.
             </Typography>
             <Button
-              href="/create"
+              href="/cadastrar"
               style={btnS}
               color="primary"
               variant="contained"

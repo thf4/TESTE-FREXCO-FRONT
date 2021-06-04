@@ -8,13 +8,13 @@ const PrivateRouter = ({ component: Routercomponent, ...rest }) => {
   const history = useHistory();
 
   useEffect(() => {
-    const token = sessionStorage.getItem("token");
+    const token = sessionStorage.getItem("Token");
     if (token) {
       try {
         const userData = jwt.decode(token, { headers: true });
         setAuthenticated(userData);
       } catch (err) {
-        sessionStorage.removeItem("token");
+        sessionStorage.removeItem("Token");
         setAuthenticated(null);
         history.push("/login");
       }

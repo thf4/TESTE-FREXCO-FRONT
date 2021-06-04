@@ -3,17 +3,9 @@ import { TextField, Button, Paper, Grid, Typography } from "@material-ui/core";
 import Axios from "../../Config/axios";
 import { api } from "../../Config/host";
 import { Link, useHistory } from "react-router-dom";
+import { paperStyle, btnS, btnStyle } from "./style";
 
 const Create = () => {
-  const paperStyle = {
-    padding: 20,
-    height: 600,
-    width: 400,
-    margin: "20px auto",
-  };
-  const btnS = { backgroundColor: "green", margin: "8px 0" };
-  const btnStyle = { margin: "8px 0" };
-
   const [error, setError] = useState();
   const [success, setSuccess] = useState();
   const [user, setUser] = useState({

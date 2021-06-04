@@ -31,32 +31,33 @@ const Home = () => {
               src="https://dourados.saofranciscoonline.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/a/c/acelga-unidade-0000000028684.jpg"
             />
             <CardContent>
-              <Typography gutterBottom variant="h5" component="h2">
-                Acelga
+              <Typography>
+                <h3>Acelga</h3>
               </Typography>
-              <Typography variant="body2" color="textSecondary" component="p">
-                Uni
+              <Typography>
+                <p> Uni</p>
               </Typography>
             </CardContent>
+
+            <CardActions>
+              <Button
+                size="small"
+                color="primary"
+                variant="contained"
+                style={btn}
+              >
+                Share
+              </Button>
+              <Button
+                size="small"
+                color="primary"
+                variant="contained"
+                style={btn}
+              >
+                Adicionar
+              </Button>
+            </CardActions>
           </CardActionArea>
-          <CardActions>
-            <Button
-              size="small"
-              color="primary"
-              variant="contained"
-              style={btn}
-            >
-              Share
-            </Button>
-            <Button
-              size="small"
-              color="primary"
-              variant="contained"
-              style={btn}
-            >
-              Adicionar
-            </Button>
-          </CardActions>
         </Card>
       </div>
     </div>
