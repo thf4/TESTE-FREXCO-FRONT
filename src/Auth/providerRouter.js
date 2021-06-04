@@ -1,25 +1,22 @@
-import React, { useContext, useEffect } from "react";
+import React from "react";
 import { Route, useHistory } from "react-router-dom";
-import { AuthContext } from "./Auth-Provider";
+
 import jwt from "jsonwebtoken";
 
 const PrivateRouter = ({ component: Routercomponent, ...rest }) => {
-  const { setAuthenticated } = useContext(AuthContext);
   const history = useHistory();
 
-  useEffect(() => {
-    const token = sessionStorage.getItem("Token");
-    if (token) {
-      try {
-        const userData = jwt.decode(token, { headers: true });
-        setAuthenticated(userData);
-      } catch (err) {
-        sessionStorage.removeItem("Token");
-        setAuthenticated(null);
-        history.push("/login");
-      }
+  const token = sessionStorage.getItem("Token");
+  if (token) {
+    try {
+      jwt.decode(token, { headers: true });
+    } catch (err) {
+      history.push("/login");
     }
-  }, [setAuthenticated, history]);
+  } else {
+    history.push("/login");
+  }
+
   return <Route {...rest} component={Routercomponent} />;
 };
 

@@ -1,11 +1,10 @@
-import React, { useState, useContext } from "react";
+import React, { useState } from "react";
 import jwt from "jsonwebtoken";
 import { TextField, Button, Paper, Grid, Typography } from "@material-ui/core";
 import { Link, useHistory, withRouter } from "react-router-dom";
 import { paperStyle, btnS, btnStyle } from "./style";
 import Axios from "../../Config/axios";
 import { api } from "../../Config/host";
-import { AuthContext } from "../../Auth/Auth-Provider";
 
 const Login = () => {
   const history = useHistory();
@@ -15,8 +14,6 @@ const Login = () => {
     password: "",
   });
 
-  const { setAuthenticated } = useContext(AuthContext);
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -24,7 +21,6 @@ const Login = () => {
       const response = await Axios().post(api + "/login", user);
       sessionStorage.setItem("Token", response.data.token);
       const token = jwt.decode(response.data.token);
-      setAuthenticated(true);
       history.push(`/cliente/${token._id}/dados`);
     } catch (err) {
       if (
@@ -34,7 +30,7 @@ const Login = () => {
         err.response.data.message
       ) {
         const rest = err.response.data.message;
-        setAuthenticated(false);
+
         setError(rest);
       } else {
         setError("Erro inesperado!");

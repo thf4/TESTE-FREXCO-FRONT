@@ -1,6 +1,7 @@
 import { makeStyles } from "@material-ui/core/styles";
 
-export const btn = { backgroundColor: "green" };
+export const btn = { backgroundColor: "green",
+marginLeft:"40px" };
 
 export const title = {
   textAlign: "center",
@@ -10,8 +11,13 @@ export const title = {
 
 export const useStyles = makeStyles({
   root: {
-    maxWidth: 345,
-    margin: "20px",
+    maxWidth: 250,
   },
 });
 
+export const styleDiv = {
+  display: "inline-block",
+  marginTop: "100px",
+  marginLeft: "20px",
+  marginRight: "20px",
+};

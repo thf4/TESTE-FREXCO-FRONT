@@ -1,65 +1,91 @@
-import Card from "@material-ui/core/Card";
-import CardActionArea from "@material-ui/core/CardActionArea";
-import CardActions from "@material-ui/core/CardActions";
-import CardContent from "@material-ui/core/CardContent";
-import CardMedia from "@material-ui/core/CardMedia";
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
+import React, { useState, useEffect } from "react";
+import {
+  Card,
+  Container,
+  CardContent,
+  CardMedia,
+  Button,
+  CardActionArea,
+  Typography,
+  CardActions,
+} from "@material-ui/core";
+
 import Header from "../../Components/Header";
-import { useStyles, title, btn } from "./style";
+import { useStyles, title, btn, styleDiv } from "./style";
+import { api } from "../../Config/host";
+import Axios from "../../Config/axios";
 
 const Home = () => {
   const classes = useStyles();
+
+  const [card, setCard] = useState([]);
+  const [count, setCount] = useState();
+  
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const { data } = await Axios().get(`${api}/product`);
+
+        setCard(data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    loadData();
+  }, []);
+
   return (
     <div>
       <Header />
       <div>
-        <Typography gutterBottom variant="h5" component="h2" style={title}>
+        <Typography gutterBottom variant="h5" style={title}>
           O que você deseja levar hoje?
           <br /> Pedidos feitos até às 18h são entregues no dia seguinte.
           <br /> Taxa de entrega: R$ 5,00
         </Typography>
       </div>
-
-      <div style={{ margin: "100px", display: "inline-flex" }}>
-        <Card className={classes.root}>
-          <CardActionArea>
-            <CardMedia
-              component="img"
-              alt="Contemplative Reptile"
-              height="240"
-              src="https://dourados.saofranciscoonline.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/a/c/acelga-unidade-0000000028684.jpg"
-            />
-            <CardContent>
-              <Typography>
-                <h3>Acelga</h3>
-              </Typography>
-              <Typography>
-                <p> Uni</p>
-              </Typography>
-            </CardContent>
-
-            <CardActions>
-              <Button
-                size="small"
-                color="primary"
-                variant="contained"
-                style={btn}
-              >
-                Share
-              </Button>
-              <Button
-                size="small"
-                color="primary"
-                variant="contained"
-                style={btn}
-              >
-                Adicionar
-              </Button>
-            </CardActions>
-          </CardActionArea>
-        </Card>
-      </div>
+      <Container maxWidth="lg">
+        {card &&
+          card.map((item) => {
+            return (
+              <div style={styleDiv} key={item._id}>
+                <Card className={classes.root}>
+                  <CardActionArea>
+                    <CardMedia
+                      component="img"
+                      alt="Contemplative Reptile"
+                      height="200"
+                      src="https://dourados.saofranciscoonline.com/media/catalog/product/cache/1/image/9df78eab33525d08d6e5fb8d27136e95/a/c/acelga-unidade-0000000028684.jpg"
+                    />
+                    <CardContent>
+                      <Typography variant="h5">{item.name}</Typography>
+                      <Typography>{item.description}</Typography>
+                    </CardContent>
+                  </CardActionArea>
+                  <CardActions>
+                    <Button
+                      size="small"
+                      color="primary"
+                      variant="contained"
+                      style={btn}
+                    >
+                      Share
+                    </Button>
+                    <Button
+                      size="small"
+                      color="primary"
+                      variant="contained"
+                      style={btn}
+                    >
+                      Adicionar
+                    </Button>
+                  </CardActions>
+                </Card>
+              </div>
+            );
+          })}
+      </Container>
     </div>
   );
 };

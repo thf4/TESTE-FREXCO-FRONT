@@ -1,28 +1,61 @@
-import React from "react";
+import React, { useState } from "react";
+import { useParams } from "react-router-dom";
 import { TextField, Button, Container, Grid } from "@material-ui/core";
+import { paperStyle, campoForm, btnS, btnStyle } from "./style";
 import Header from "../../Components/Header";
+import { api } from "../../Config/host";
+import Axios from "../../Config/axios";
 
 const Product = () => {
-  const paperStyle = {
-    padding: "20px 0",
-    height: 600,
-    width: 600,
-    margin: "20px 0",
+  const [error, setError] = useState();
+  const [success, setSuccess] = useState();
+  const [product, setProduct] = useState({
+    name: "",
+    description: "",
+    price: "",
+    qty: "",
+    image: "",
+  });
+  const params = useParams();
+
+  const cadProduct = async (e) => {
+    e.preventDefault();
+    const { _id } = params;
+    try {
+      const response = await Axios().post(
+        api + "/user/" + _id + "/product",
+        product
+      );
+      setSuccess("Cadastrado com sucesso");
+      return response;
+    } catch (err) {
+      if (
+        err &&
+        err.response &&
+        err.response.data &&
+        err.response.data.message
+      ) {
+        const rest = err.response.data.message;
+
+        setError(rest);
+      } else {
+        setError("Erro inesperado!");
+      }
+    }
   };
 
-  const btnS = { backgroundColor: "#455a64", margin: "8px 5px" };
-  const btnStyle = { margin: "10px ", align: "center" };
-  const campoForm = { width: "100%" };
   return (
     <div>
       <Header />
       <Container>
-        <Grid alignItems="center">
+        <Grid>
           <h2 style={{ margin: "8px 0", paddingTop: "50px" }}>
             Cadastrar Produto{" "}
           </h2>
 
-          <form style={paperStyle}>
+          <form style={paperStyle} onSubmit={cadProduct}>
+            {error}
+            {success}
             <div style={campoForm}>
               <TextField
                 type="text"
@@ -31,8 +64,10 @@ const Product = () => {
                 label="Nome do Produto"
                 size="small"
                 fullWidth
-                required
                 style={btnStyle}
+                onChange={(e) =>
+                  setProduct({ ...product, name: e.target.value })
+                }
               />
               <TextField
                 type="text"
@@ -41,8 +76,10 @@ const Product = () => {
                 label="Descrição do Produto"
                 size="small"
                 fullWidth
-                required
                 style={btnStyle}
+                onChange={(e) =>
+                  setProduct({ ...product, description: e.target.value })
+                }
               />
               <TextField
                 type="text"
@@ -51,27 +88,33 @@ const Product = () => {
                 label="Preço"
                 size="small"
                 fullWidth
-                required
                 style={btnStyle}
+                onChange={(e) =>
+                  setProduct({ ...product, price: e.target.value })
+                }
               />
               <TextField
                 type="Number"
                 id="qty"
                 variant="outlined"
                 label="Quantidade"
-                required
                 fullWidth
                 size="small"
                 style={btnStyle}
+                onChange={(e) =>
+                  setProduct({ ...product, qty: e.target.value })
+                }
               />
               <TextField
                 type="file"
-                id="zip"
+                id="image"
                 variant="outlined"
-                required
                 fullWidth
                 size="small"
                 style={btnStyle}
+                onChange={(e) =>
+                  setProduct({ ...product, image: e.target.value })
+                }
               />
               <Button
                 type="submit"

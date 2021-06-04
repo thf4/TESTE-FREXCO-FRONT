@@ -10,10 +10,9 @@ import PrivateRouter from "./Auth/providerRouter";
 import Login from "./Pages/Login";
 import Create from "./Pages/CreateUser";
 import Home from "./Pages/Home";
-import Dados from "./Pages/AdClient";
+import Dados from "./Pages/dataClient";
 import Product from "./Pages/Product";
 import EditProduct from "./Pages/Product/editProduct";
-import Edit from "./Pages/dataClient/index";
 
 function App() {
   return (
@@ -25,14 +24,10 @@ function App() {
             <Route exact path="/login" component={Login} />
             <Route exact path="/cadastrar" component={Create} />
             <PrivateRouter exact path="/home" component={Home} />
-            <PrivateRouter
-              exact
-              path="/cliente/:_id/shipping"
-              component={Dados}
-            />
-            <PrivateRouter exact path="/cliente/:_id/dados" component={Edit} />
-            <PrivateRouter exact path="/product" component={Product} />
-            <PrivateRouter exact path="/product/edit" component={EditProduct} />
+            <PrivateRouter exact path="/user/:_id/dados" component={Dados} />
+            <PrivateRouter exact path="/user/:_id/product" component={Product} />
+            <PrivateRouter exact path="/product/edit/:_id" component={EditProduct} />
+            <PrivateRouter exact path="/cart" component={EditProduct} />
             <Route path="*" component={() => "404 NOT FOUND"} />
           </Switch>
         </Router>
