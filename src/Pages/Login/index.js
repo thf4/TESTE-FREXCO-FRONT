@@ -5,6 +5,7 @@ import { Link, useHistory, withRouter } from "react-router-dom";
 import { paperStyle, btnS, btnStyle } from "./style";
 import Axios from "../../Config/axios";
 import { api } from "../../Config/host";
+import Header from "../../Components/Header";
 
 const Login = () => {
   const history = useHistory();
@@ -21,7 +22,7 @@ const Login = () => {
       const response = await Axios().post(api + "/login", user);
       sessionStorage.setItem("Token", response.data.token);
       const token = jwt.decode(response.data.token);
-      history.push(`/cliente/${token._id}/dados`);
+      history.push(`/user/${token._id}/dados`);
     } catch (err) {
       if (
         err &&
@@ -40,6 +41,7 @@ const Login = () => {
 
   return (
     <div>
+      <Header />
       <Grid>
         <Paper elevation={10} style={paperStyle}>
           <Grid align="center">

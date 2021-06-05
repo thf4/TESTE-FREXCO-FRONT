@@ -1,23 +1,16 @@
-import { makeStyles } from "@material-ui/core/styles";
-
-export const btn = { backgroundColor: "green",
-marginLeft:"40px" };
-
 export const title = {
   textAlign: "center",
   color: "#8bc34a",
   marginTop: "100px",
 };
 
-export const useStyles = makeStyles({
-  root: {
-    maxWidth: 250,
-  },
-});
+export const btnS = { backgroundColor: "green", margin: "2px 0px 0px 2px",  };
 
-export const styleDiv = {
+export const paper = {
+  width: "500px",
+  margin: "100px 10px",
   display: "inline-block",
-  marginTop: "100px",
-  marginLeft: "20px",
-  marginRight: "20px",
+  elevation: "6",
+  backgroundColor: "white",
+  fontSize:"15px"
 };

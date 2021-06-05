@@ -1,7 +1,7 @@
-import React, { useState } from "react";
-import { useParams } from "react-router-dom";
-import { TextField, Button, Container, Grid } from "@material-ui/core";
-import { paperStyle, campoForm, btnS, btnStyle } from "./style";
+import React, { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
+import { TextField, Button, Container, Grid, Paper } from "@material-ui/core";
+import { paperStyle, campoForm, btnS, btnStyle, paper } from "./style";
 import Header from "../../Components/Header";
 import { api } from "../../Config/host";
 import Axios from "../../Config/axios";
@@ -9,6 +9,7 @@ import Axios from "../../Config/axios";
 const Product = () => {
   const [error, setError] = useState();
   const [success, setSuccess] = useState();
+  const [card, setCard] = useState();
   const [product, setProduct] = useState({
     name: "",
     description: "",
@@ -16,16 +17,14 @@ const Product = () => {
     qty: "",
     image: "",
   });
-  const params = useParams();
+  const history = useHistory();
 
   const cadProduct = async (e) => {
     e.preventDefault();
-    const { _id } = params;
+
     try {
-      const response = await Axios().post(
-        api + "/user/" + _id + "/product",
-        product
-      );
+      const response = await Axios().post(`${api}/product`, product);
+      document.location.reload(true);
       setSuccess("Cadastrado com sucesso");
       return response;
     } catch (err) {
@@ -43,6 +42,18 @@ const Product = () => {
       }
     }
   };
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const { data } = await Axios().get(`${api}/product`);
+        setCard(data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    loadData();
+  }, []);
 
   return (
     <div>
@@ -106,7 +117,7 @@ const Product = () => {
                 }
               />
               <TextField
-                type="file"
+                type="text"
                 id="image"
                 variant="outlined"
                 fullWidth
@@ -126,6 +137,62 @@ const Product = () => {
               </Button>
             </div>
           </form>
+          <h2> PRODUTOS CADASTRADOS </h2>
+          {card &&
+            card.map((item) => {
+              const handleDelete = async () => {
+                try {
+                  const data = await Axios().delete(
+                    `${api}/product/${item._id}`
+                  );
+                  document.location.reload(true);
+                  return data;
+                } catch (err) {
+                  console.log(err);
+                }
+              };
+              const handleEdit = async () => {
+                history.push(`product/${item._id}`);
+              };
+
+              return (
+                <Paper style={paper} key={item._id}>
+                  <img
+                    alt=""
+                    height="100"
+                    src={item.image}
+                    style={{ float: "right" }}
+                  />
+                  <ul>
+                    <li>
+                      <strong>{item.name}</strong>
+                    </li>
+                    <li>{item.description}</li>
+                    <li>{item.price}</li>
+                    <li>{item.qty}</li>
+                  </ul>
+
+                  <Button
+                    size="small"
+                    color="primary"
+                    variant="contained"
+                    style={btnS}
+                    onClick={handleEdit}
+                  >
+                    Editar
+                  </Button>
+                  <Button
+                    size="small"
+                    color="primary"
+                    variant="contained"
+                    style={btnS}
+                    onClick={handleDelete}
+                  >
+                    Deletar
+                  </Button>
+                </Paper>
+              );
+            })}
         </Grid>
       </Container>
     </div>
