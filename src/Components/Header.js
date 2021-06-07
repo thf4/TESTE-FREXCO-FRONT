@@ -2,23 +2,62 @@ import React, { useContext } from "react";
 import { AppBar, Toolbar, Typography, Button, Icon } from "@material-ui/core";
 import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 
-import { Link } from "react-router-dom";
-import { styleaBar, btnColor, useStyles } from "./style";
+import { Link, useHistory } from "react-router-dom";
+import { styleaBar, btnColor, useStyles, color } from "./style";
 import { AuthContext } from "../Auth/Auth-Provider";
-const Header = () => {
 
+const Header = (props) => {
   const classes = useStyles();
   const { authenticated } = useContext(AuthContext);
+  const history = useHistory();
 
-  const isAuthenticated = () =>{
-    if(!authenticated){
-      return <Button> Entrar </Button>
+  const logout = () => {
+    sessionStorage.clear("Token");
+    history.push("/login");
+    window.location.reload();
+  };
+
+  const IsLogged = (props) => {
+    return (
+      <>
+        <Button
+          href={`/user/${authenticated && authenticated._id}/dados`}
+          style={btnColor}
+        >
+          Dados
+        </Button>
+        <Button
+          href={`/user/${authenticated && authenticated._id}/product`}
+          style={btnColor}
+        >
+          Cadastrar Produtos
+        </Button>
+        <Button onClick={logout} style={btnColor}>
+          Sair
+        </Button>
+      </>
+    );
+  };
+
+  const NotLogged = (props) => {
+    return (
+      <Button style={btnColor} href="/login">
+        Entrar
+      </Button>
+    );
+  };
+
+  const IsAuthenticated = () => {
+    if (authenticated) {
+      return <IsLogged />;
+    } else {
+      return <NotLogged />;
     }
-  }
+  };
 
   return (
     <div>
-      <AppBar position="static" onChange={isAuthenticated}>
+      <AppBar position="static">
         <Toolbar style={styleaBar}>
           <Typography variant="h5" className={classes.title}>
             <Link to="/home">
@@ -29,26 +68,12 @@ const Header = () => {
               />
             </Link>
           </Typography>
-          <Button style={btnColor}>aqui</Button>
-          <Button
-            href={`/user/${authenticated && authenticated._id}/dados`}
-            style={btnColor}
-          >
-            Dados
-          </Button>
-          <Button
-            href={`/user/${authenticated && authenticated._id}/product`}
-            style={btnColor}
-          >
-            Cadastrar Produtos
-          </Button>
-          <Button
-            href={`/user/${authenticated && authenticated._id}/cart`}
-            style={btnColor}
-          >
+          <IsAuthenticated />
+          <Button style={btnColor}>
             <Icon>
               <ShoppingCartIcon />
             </Icon>
+            <span style={color}>({props.text})</span>
           </Button>
         </Toolbar>
       </AppBar>

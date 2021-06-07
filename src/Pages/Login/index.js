@@ -23,6 +23,7 @@ const Login = () => {
       sessionStorage.setItem("Token", response.data.token);
       const token = jwt.decode(response.data.token);
       history.push(`/user/${token._id}/dados`);
+      window.location.reload();
     } catch (err) {
       if (
         err &&

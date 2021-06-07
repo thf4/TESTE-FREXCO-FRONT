@@ -12,7 +12,6 @@ import Create from "./Pages/CreateUser";
 import Home from "./Pages/Home";
 import Dados from "./Pages/dataClient";
 import Product from "./Pages/Product";
-import Cart from "./Pages/Cart";
 import EditProduct from "./Pages/Product/editProduct";
 
 function App() {
@@ -26,9 +25,17 @@ function App() {
             <Route exact path="/cadastrar" component={Create} />
             <PrivateRouter exact path="/home" component={Home} />
             <PrivateRouter exact path="/user/:_id/dados" component={Dados} />
-            <PrivateRouter exact path="/user/:_id/product" component={Product} />
-            <PrivateRouter exact path="/user/:_id/product/:_id" component={EditProduct} />
-            <PrivateRouter exact path="/user/:_id/cart" component={Cart} />
+            <PrivateRouter
+              exact
+              path="/user/:_id/product"
+              component={Product}
+            />
+            <PrivateRouter
+              exact
+              path="/user/:_id/product/:_id"
+              component={EditProduct}
+            />
+
             <Route path="*" component={() => "404 NOT FOUND"} />
           </Switch>
         </Router>

@@ -46,6 +46,7 @@ const Dados = () => {
       const { _id } = params;
       const response = await Axios().put(`${api}/user/${_id}`, dado);
       setSuccess("Atualizado com sucesso");
+      window.location.reload();
       return response;
     } catch (err) {
       console.log(err);
@@ -66,7 +67,7 @@ const Dados = () => {
       }
     };
     loadData();
-  }, []);
+  }, [params]);
 
   return (
     <div>
@@ -90,7 +91,7 @@ const Dados = () => {
               required
               fullWidth
               style={btnStyle}
-              value={dado && dado.name}
+              value={dado.name || ""}
               onChange={(e) => setDado({ ...dado, name: e.target.value })}
             />
             <TextField
@@ -102,7 +103,7 @@ const Dados = () => {
               required
               fullWidth
               style={btnStyle}
-              value={dado && dado.surname}
+              value={dado.surname || ""}
               onChange={(e) => setDado({ ...dado, surname: e.target.value })}
             />
 
@@ -114,9 +115,7 @@ const Dados = () => {
               fullWidth
               size="small"
               style={btnStyle}
-              value={
-                (authenticated && authenticated.email) || (dado && dado.email)
-              }
+              value={(authenticated && authenticated.email) || ""}
               onChange={(e) => setDado({ ...dado, email: e.target.value })}
             />
             <TextField
@@ -144,7 +143,7 @@ const Dados = () => {
         </form>
         <form style={paperDiv} onSubmit={dataUser}>
           <div style={Cliente}>
-            <h3 style={tittle}>Endereços de Entrega</h3>
+            <h3 style={tittle}>Endereço de Entrega</h3>
           </div>
 
           {error}
@@ -158,7 +157,7 @@ const Dados = () => {
               size="small"
               aria-required
               style={btnStyle}
-              value={dado && dado.nameAd}
+              value={dado.nameAd || ""}
               onChange={(e) => setDado({ ...dado, nameAd: e.target.value })}
             />
             <TextField
@@ -169,7 +168,7 @@ const Dados = () => {
               size="small"
               aria-required
               style={btnStyle}
-              value={dado && dado.cpf}
+              value={dado.cpf || ""}
               onChange={(e) => setDado({ ...dado, cpf: e.target.value })}
             />
             <TextField
@@ -180,7 +179,7 @@ const Dados = () => {
               size="small"
               aria-required
               style={btnStyle}
-              value={dado && dado.zip}
+              value={dado.zip || ""}
               onChange={(e) => setDado({ ...dado, zip: e.target.value })}
             />
             <TextField
@@ -191,7 +190,7 @@ const Dados = () => {
               size="small"
               aria-required
               style={btnStyle}
-              value={dado && dado.cellphone}
+              value={dado.cellphone || ""}
               onChange={(e) => setDado({ ...dado, cellphone: e.target.value })}
             />
             <TextField
@@ -202,7 +201,7 @@ const Dados = () => {
               size="small"
               aria-required
               style={btnStyle}
-              value={dado && dado.telephone}
+              value={dado.telephone || ""}
               onChange={(e) => setDado({ ...dado, telephone: e.target.value })}
             />
             <TextField
@@ -213,7 +212,7 @@ const Dados = () => {
               size="small"
               aria-required
               style={btnStyle}
-              value={dado && dado.address}
+              value={dado.address || ""}
               onChange={(e) => setDado({ ...dado, address: e.target.value })}
             />
             <TextField
@@ -224,45 +223,45 @@ const Dados = () => {
               size="small"
               aria-required
               style={btnStyle}
-              value={dado && dado.number}
+              value={dado.number || ""}
               onChange={(e) => setDado({ ...dado, number: e.target.value })}
             />
 
             <TextField
-              type="email"
+              type="text"
               id="district"
               variant="outlined"
               label="Bairro"
               aria-required
               size="small"
               style={btnStyle}
-              value={dado && dado.district}
+              value={dado.district || ""}
               onChange={(e) => setDado({ ...dado, district: e.target.value })}
             />
             <TextField
-              type="email"
+              type="text"
               id="state"
               variant="outlined"
               label="Estado"
               aria-required
               size="small"
               style={btnStyle}
-              value={dado && dado.state}
+              value={dado.state || ""}
               onChange={(e) => setDado({ ...dado, state: e.target.value })}
             />
             <TextField
-              type="email"
+              type="text"
               id="city"
               variant="outlined"
               label="Cidade"
               aria-required
               size="small"
               style={btnStyle}
-              value={dado && dado.city}
+              value={dado.city || ""}
               onChange={(e) => setDado({ ...dado, city: e.target.value })}
             />
             <TextField
-              type="email"
+              type="text"
               id="complement"
               variant="outlined"
               label="Complemento"
@@ -270,7 +269,7 @@ const Dados = () => {
               fullWidth
               size="small"
               style={btnStyle}
-              value={dado && dado.complement}
+              value={dado.complement || ""}
               onChange={(e) => setDado({ ...dado, complement: e.target.value })}
             />
 

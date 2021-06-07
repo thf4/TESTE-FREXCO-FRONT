@@ -9,4 +9,6 @@ export const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
 }));
-
+export const color = {
+  color:"black"
+}

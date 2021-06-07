@@ -24,8 +24,8 @@ const Product = () => {
 
     try {
       const response = await Axios().post(`${api}/product`, product);
-      document.location.reload(true);
       setSuccess("Cadastrado com sucesso");
+      window.location.reload();
       return response;
     } catch (err) {
       if (
@@ -120,6 +120,7 @@ const Product = () => {
                 type="text"
                 id="image"
                 variant="outlined"
+                label="ImagemUrl"
                 fullWidth
                 size="small"
                 style={btnStyle}
@@ -145,7 +146,7 @@ const Product = () => {
                   const data = await Axios().delete(
                     `${api}/product/${item._id}`
                   );
-                  document.location.reload(true);
+                  window.location.reload();
                   return data;
                 } catch (err) {
                   console.log(err);
