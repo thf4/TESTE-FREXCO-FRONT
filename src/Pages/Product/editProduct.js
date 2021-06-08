@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { TextField, Button, Container, Grid } from "@material-ui/core";
 import { useParams, useHistory } from "react-router-dom";
 import { paperStyle, campoForm, btnS, btnStyle } from "./styleEdit";
@@ -18,6 +18,7 @@ const EditProduct = () => {
   const [success, setSuccess] = useState();
   const params = useParams();
   const history = useHistory();
+
   const editCard = async (e) => {
     e.preventDefault();
     const { _id } = params;
@@ -31,6 +32,19 @@ const EditProduct = () => {
       setError(res);
     }
   };
+
+  useEffect(() => {
+    const { _id } = params;
+    const loadData = async () => {
+      try {
+        const { data } = await Axios().get(`${api}/product/${_id}`);
+        setData(data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    loadData();
+  }, []);
 
   return (
     <div>

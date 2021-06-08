@@ -26,7 +26,7 @@ const Home = () => {
   const { authenticated } = useContext(AuthContext);
 
   const removeItem = (params) => {
-    setCart(cart.filter((_id) => _id !== params));
+    setCart(cart.filter((product) => product.productId !== params));
   };
   const contadorChange = (value) => {
     const res = cart.find((c) => c.productId === value.productId);
@@ -47,15 +47,19 @@ const Home = () => {
   const final = async (e) => {
     e.preventDefault();
     try {
-      const data = await Axios().post(
-        `${api}/user/${authenticated._id}/cart`,
-        cart
-      );
+      const data = await Axios().post(`${api}/cart`, {
+        user: authenticated._id,
+        product: cart,
+      });
       setSuccess("Finalizado com sucesso!");
+      setError(null);
       return data;
     } catch (err) {
-      const res = err.response.data.message;
-      setError(res);
+      if (err && err.response && err.response.data) {
+        const { message, product } = err.response.data;
+        setError(`${message} O produto ${product.name} está fora de estoque!`);
+        setSuccess(null);
+      }
     }
   };
 
@@ -151,7 +155,9 @@ const Home = () => {
                           <strong>{data && data.name}</strong>
                         </li>
                         <li>Descrição: {data && data.description}</li>
-                        <li>R$ {data && data.price && +data.price.toFixed(2)}</li>
+                        <li>
+                          R$ {data && data.price && +data.price.toFixed(2)}
+                        </li>
                         <li>Quantidade: {item.count}</li>
                       </ul>
                       <Button
@@ -160,7 +166,7 @@ const Home = () => {
                         variant="contained"
                         style={btnS}
                         fullWidth
-                        onClick={() => removeItem(data)}
+                        onClick={() => removeItem(item.productId)}
                       >
                         Remover item
                       </Button>
