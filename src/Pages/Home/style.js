@@ -17,7 +17,7 @@ export const paper = {
 
 export const paperCart = {
   width: "500px",
-  margin: "200px 10px 0px 10px",
+  margin: "200px 10px 0px 50px",
   display: "inline-block",
   elevation: "4",
   backgroundColor: "white",
@@ -28,7 +28,7 @@ export const paperStyle = {
   padding: 50,
   height: "100%",
   width: 650,
-  marginLeft: "400px",
+  marginLeft: "1px",
 };
 
 export const divs = {
@@ -43,6 +43,4 @@ export const divC = {
 
 export const div = {
   fontSize: "0",
-  display:"block"
-
 };

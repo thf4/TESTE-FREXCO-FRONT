@@ -4,7 +4,7 @@ import ShoppingCartIcon from "@material-ui/icons/ShoppingCart";
 
 import { Link, useHistory } from "react-router-dom";
 import { styleaBar, btnColor, useStyles, color } from "./style";
-import { AuthContext } from "../Auth/Auth-Provider";
+import { AuthContext } from "../../Auth/Auth-Provider";
 
 const Header = (props) => {
   const classes = useStyles();

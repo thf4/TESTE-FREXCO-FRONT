@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Container, Grid, Button, Paper, Typography } from "@material-ui/core";
+import { Grid, Button, Paper, Typography } from "@material-ui/core";
+import { Alert, AlertTitle } from "@material-ui/lab";
+
 import Header from "../../Components/Header";
 import {
   paper,
@@ -11,10 +13,10 @@ import {
   div,
   divC,
 } from "./style";
+import { AuthContext } from "../../Auth/Auth-Provider";
+import Contador from "../../Components/Contador";
 import { api } from "../../Config/host";
 import Axios from "../../Config/axios";
-import { AuthContext } from "../../Auth/Auth-Provider";
-import { Alert, AlertTitle } from "@material-ui/lab";
 
 const Home = () => {
   const [product, setProduct] = useState([]);
@@ -23,28 +25,40 @@ const Home = () => {
   const [error, setError] = useState();
   const { authenticated } = useContext(AuthContext);
 
-  const addButton = (product) => {
-    setCart([...cart, { ...product }]);
+  const removeItem = (params) => {
+    setCart(cart.filter((_id) => _id !== params));
+  };
+  const contadorChange = (value) => {
+    const res = cart.find((c) => c.productId === value.productId);
+    let arr = [];
+
+    if (res) {
+      arr = cart.map((c) => {
+        if (c.productId === value.productId) return value;
+
+        return c;
+      });
+    } else {
+      arr = [...cart, value];
+    }
+    setCart(arr);
   };
 
-  const removeItem = (productRemove) => {
-    setCart(cart.filter((product) => product !== productRemove));
-  };
-
-  const final = async () => {
+  const final = async (e) => {
+    e.preventDefault();
     try {
-      console.log(cart);
-      const response = await Axios().post(
+      const data = await Axios().post(
         `${api}/user/${authenticated._id}/cart`,
         cart
       );
       setSuccess("Finalizado com sucesso!");
-      return response;
+      return data;
     } catch (err) {
       const res = err.response.data.message;
       setError(res);
     }
   };
+
   useEffect(() => {
     const loadData = async () => {
       try {
@@ -80,70 +94,65 @@ const Home = () => {
           </Alert>
         )}
       </div>
+
       <div style={div}>
         <div style={divC}>
-          <Container>
-            {product &&
-              product.map((product, id) => {
-                return (
-                  <Paper style={paperCart} key={id}>
-                    <img
-                      alt={product.name}
-                      height="100"
-                      src={product.image}
-                      style={{ float: "right" }}
-                    />
-                    <ul style={{ listStyle: "none" }}>
-                      <li>
-                        <strong>{product.name}</strong>
-                      </li>
-                      <li>{product.description}</li>
-                      <li>{product.price}</li>
-                    </ul>
-
-                    <Button
-                      size="small"
-                      color="primary"
-                      variant="contained"
-                      style={btnS}
-                      fullWidth
-                      onClick={() => addButton(product)}
-                    >
-                      {product.price} R$ Adicionar
-                    </Button>
-                  </Paper>
-                );
-              })}
-          </Container>
+          {product.map((item) => {
+            return (
+              <Paper style={paperCart} key={`p${item._id}`}>
+                <img
+                  alt={item.name}
+                  height="100"
+                  src={item.image}
+                  style={{ float: "right" }}
+                />
+                <ul style={{ listStyle: "none" }}>
+                  <li>
+                    <strong>{item.name}</strong>
+                  </li>
+                  <li>{item.description}</li>
+                  <li>{item.price}</li>
+                </ul>
+                <Contador
+                  productId={item._id}
+                  price={item.price}
+                  onChange={contadorChange}
+                />
+              </Paper>
+            );
+          })}
         </div>
 
         <div style={divs}>
-          <Paper elevation={8} style={paperStyle}>
-            <Grid align="center">
-              <img
-                width="200"
-                alt="frexco-Logo"
-                src="https://frexco-images-prd.s3.amazonaws.com/uploads/2020/10/26/339c1848-47e9-4c4a-ba67-1f952737345b.png"
-              />
-            </Grid>
+          <form onSubmit={final}>
+            <Paper elevation={8} style={paperStyle}>
+              <Grid align="center">
+                <img
+                  width="200"
+                  alt="frexco-Logo"
+                  src="https://frexco-images-prd.s3.amazonaws.com/uploads/2020/10/26/339c1848-47e9-4c4a-ba67-1f952737345b.png"
+                />
+              </Grid>
 
-            {cart &&
-              cart.map((cartP, idx) => {
+              {cart.map((item) => {
+                const data = product.find((p) => item.productId === p._id);
+
                 return (
-                  <>
-                    <Paper style={paper} key={idx}>
+                  <div key={`b${item.productId}`}>
+                    <Paper style={paper}>
                       <img
-                        alt={cartP.name}
+                        alt={data && data.name}
                         height="100"
-                        src={cartP.image}
+                        src={data && data.image}
                         style={{ float: "right" }}
                       />
                       <ul style={{ listStyle: "none" }}>
                         <li>
-                          <strong>{cartP.name}</strong>
+                          <strong>{data && data.name}</strong>
                         </li>
-                        <li>{cartP.description}</li>
-                        <li>{cartP.price}</li>
+                        <li>Descrição: {data && data.description}</li>
+                        <li>R$ {data && data.price && +data.price.toFixed(2)}</li>
+                        <li>Quantidade: {item.count}</li>
                       </ul>
                       <Button
                         size="small"
@@ -151,25 +160,26 @@ const Home = () => {
                         variant="contained"
                         style={btnS}
                         fullWidth
-                        onClick={() => removeItem(cartP)}
+                        onClick={() => removeItem(data)}
                       >
                         Remover item
                       </Button>
                     </Paper>
-                  </>
+                  </div>
                 );
               })}
 
-            <Button
-              style={btnS}
-              color="primary"
-              variant="contained"
-              fullWidth
-              onClick={() => final()}
-            >
-              {cart.length} Finalizar Compra
-            </Button>
-          </Paper>
+              <Button
+                style={btnS}
+                color="primary"
+                variant="contained"
+                fullWidth
+                type="submit"
+              >
+                Finalizar Compra
+              </Button>
+            </Paper>
+          </form>
         </div>
       </div>
     </div>
